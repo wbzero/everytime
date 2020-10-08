@@ -2,8 +2,19 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import axios from 'axios'
+import Vant from 'vant';
+import 'vant/lib/index.css';
+import * as filter from './utils/filter.js';
 
+Vue.use(Vant);
 Vue.config.productionTip = false
+Vue.prototype.$axios = axios
+
+Object.keys(filter).forEach(key=>{
+  console.log(key);
+  Vue.filter(key,filter[key])
+})
 
 new Vue({
   router,
