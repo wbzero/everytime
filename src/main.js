@@ -12,7 +12,7 @@ Vue.config.productionTip = false
 Vue.prototype.$axios = axios
 
 Object.keys(filter).forEach(key=>{
-  console.log(key);
+  // console.log(key);
   Vue.filter(key,filter[key])
 })
 

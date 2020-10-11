@@ -11,7 +11,8 @@ axios.defaults.timeout = 5000;
 // 请求拦截和响应拦截
 axios.interceptors.request.use(
     config => {
-        config.headers = {DeviceType:'H5'}
+        let token = 'Bearer '+localStorage.token;
+        config.headers = {DeviceType:'H5',Authorization:token}
         return config
     }
 );

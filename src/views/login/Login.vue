@@ -1,7 +1,8 @@
 <template>
     <div>
         <div class="login_img">
-            <img src="http://120.53.31.103:84/uploads/image/2020-05-27/sDSSCsWo1oSMRqHp7QqUSDzTeqn2f76nDH4SgAk1.jpeg" alt="">
+            <img src="http://120.53.31.103:84/uploads/image/2020-05-27/sDSSCsWo1oSMRqHp7QqUSDzTeqn2f76nDH4SgAk1.jpeg"
+                alt="">
         </div>
         <div class="login_box">
             <p class="post">
@@ -19,8 +20,9 @@
                     <button class="btn" @click="gologin">登录</button>
                 </p>
                 <p class="post" style="border:none;font-size:.12rem;justify-content:flex-start;">
-                    <van-checkbox v-model="checked"  checked-color="#E50212" icon-size="15px"/>
-                    我同意<span class="sp" @click="userdeal">用户注册协议</span>和<span class="sp" @click="guarddeal">隐私保护协议</span>
+                    <van-checkbox v-model="checked" checked-color="#E50212" icon-size="15px" />
+                    我同意<span class="sp" @click="userdeal">用户注册协议</span>和<span class="sp"
+                        @click="guarddeal">隐私保护协议</span>
                 </p>
             </div>
         </div>
@@ -38,20 +40,29 @@
             return {
                 tel: '',
                 code: '',
-                checked:true,
+                checked: true,
             }
         },
         methods: {
             gologin() {
                 if (this.code.trim() != '') {
                     let data = {
-                        client: '1',
-                        type: 2,
+                        client: 1,
+                        type: 1,
                         mobile: this.tel,
-                        sms_code: this.code
+                        password: this.code
                     };
                     postLogin(data).then(res => {
-                        console.log(res.data.data);
+                        console.log(res);
+                        let red = res.data
+                        if (red.code === 200) {
+                            localStorage.token = red.data.remember_token;
+                            this.$router.push({
+                                path: '/user'
+                            })
+                        } else {
+                            this.$toast('手机号码格式不正确或密码错误');
+                        }
                     })
                 } else {
                     if (this.tel.trim() == '') {
@@ -64,13 +75,13 @@
             goto() {
                 this.$router.go(-1)
             },
-            getback(){
+            getback() {
                 this.$router.push('/getback')
             },
-            userdeal(){
+            userdeal() {
                 this.$router.push('/userdeal')
             },
-            guarddeal(){
+            guarddeal() {
                 this.$router.push('/guarddeal')
             }
 
@@ -102,8 +113,16 @@
             align-items: center;
         }
 
+        .post:hover {
+            border-bottom: .01rem solid #E50212;
+        }
+
         input {
             border: none;
+        }
+
+        input::-webkit-input-placeholder {
+            color: #bbb;
         }
 
         .btn {
@@ -116,9 +135,10 @@
             color: #fff;
             background: linear-gradient(to right, #E46570, #E50212);
         }
-        .sp{
+
+        .sp {
             color: #E50212;
-            font-size:.12rem;
+            font-size: .12rem;
         }
     }
 </style>

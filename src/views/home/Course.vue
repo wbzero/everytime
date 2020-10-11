@@ -2,30 +2,30 @@
     <div class="classify_wrap">
         <div class="classify_wrap_main">
             <div class="classify_top">
-                <img :src="info.info.cover_img" height="100%">
+                <img :src="info.cover_img" height="100%">
             </div>
             <div class="classify_main">
                 <div class="classify_main_sum">
-                    <p>{{info.info.title}}</p>
+                    <p>{{info.title}}</p>
                     <p class="p1">
-                        <span class="p1">共{{info.info.total_periods}}课时</span> |
-                        <span class="p1">{{info.info.sales_num}}人已报名 </span>
+                        <span class="p1">共{{info.total_periods}}课时</span> |
+                        <span class="p1">{{info.sales_num}}人已报名 </span>
                     </p>
                     <p class="p1">
-                        开课时间：{{info.info.start_play_date | time}} -
-                        {{info.info.end_play_date | time}}
+                        开课时间：{{info.start_play_date | time}} -
+                        {{info.end_play_date | time}}
                     </p>
-                    <p style="color:red">{{info.info.sale_type | sale}}</p>
+                    <p style="color:red">{{info.sale_type | sale}}</p>
                 </div>
                 <div class="classify_main_team">
                     <p style="font-size: .15rem;">教学团队</p>
                     <div class="main_team_staff">
-                        <div style="width:.4rem;">
+                        <div style="width:.4rem;text-align:center;" v-for="(item,index) in teachers" :key="index">
                             <p style="width:.4rem;height:.4rem;margin-bottom:.05rem;">
-                                <img :src="info.teachers[0].teacher_avatar" width="100%" height="100%"
+                                <img :src="item.teacher_avatar" width="100%" height="100%"
                                     style="border-radius:.3rem;">
                             </p>
-                            <span style="font-size:.12rem;">{{info.teachers[0].teacher_name}}</span>
+                            <span style="font-size:.12rem;">{{item.teacher_name}}</span>
                         </div>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                         <van-tab title="课程介绍">
                             <div class="main_course_sug">
                                 <p style="margin-bottom:.1rem;">课程介绍</p>
-                                <div class="course__sug_main" v-html="info.info.course_details">
+                                <div class="course__sug_main" v-html="info.course_details">
                                 </div>
                             </div>
                         </van-tab>
@@ -73,6 +73,7 @@
                                         </div>
                                         <p style="box-sizing:border-box;padding-left:.3rem;margin-top:.1rem;font-size:.14rem;">{{item.content}}</p>
                                     </div>
+                                    <van-empty description="描述文字" v-if="assess.length==0" />
                                 </div>
                             </div>
                         </van-tab>
@@ -99,6 +100,7 @@
                 active: 0,
                 outline: [],
                 assess:[],
+                teachers:[]
             }
         },
         filters: {
@@ -126,7 +128,8 @@
             let id = this.$route.query.id;
             let res = await getClassify(id)
             // console.log(res.data.data);
-            this.info = res.data.data
+            this.info = res.data.data.info;
+            this.teachers = res.data.data.teachers
             let ret = await postCourseOutline({
                 id: id
             })
